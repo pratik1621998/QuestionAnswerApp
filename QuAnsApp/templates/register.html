@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Registration Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'register.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+<body>
+
+  <div class="container">
+    <div class="title">Registration</div>
+      <div class="content">
+        <form id="registration-form">
+          {% csrf_token %}
+          <div class="user-details">
+            <div class="input-box">
+              <span class="details">Username</span>
+              <input type="text" placeholder="Enter your username" name="username" required>
+            </div>
+            <div class="input-box">
+              <span class="details">Full Name</span>
+              <input type="text" placeholder="Enter your name" name="full_name" required>
+            </div>
+            <div class="input-box">
+              <span class="details">Email</span>
+              <input type="text" placeholder="Enter your email" name="email" required>
+            </div>
+            <div class="input-box">
+              <span class="details">Phone Number</span>
+              <input type="text" placeholder="Enter your number" name="phone_number" required>
+            </div>
+            <div class="input-box">
+              <span class="details">Password</span>
+              <input type="password" placeholder="Enter your password" name="password" required>
+            </div>
+            <div class="input-box">
+              <span class="details">Confirm Password</span>
+              <input type="password" placeholder="Confirm your password" name="password2" required>
+            </div>
+          </div>
+          <div class="button">
+            <input type="submit" value="Register">
+          </div>
+
+          <div class="login">
+            Already a member? <a href="http://127.0.0.1:8000/api/user/login">Login now</a>
+            <!-- Already a member? <a href="{% url 'login' %}">Login now</a> -->
+          </div>
+        </form>
+        <div id="registration-message"></div>
+
+        <script>
+          $(document).ready(function () {
+              $("#registration-form").on("submit ", function(e) {
+                  e.preventDefault();
+                  var formData = $(this).serialize();
+
+                  $.ajax({
+                      type: "POST",
+                      url: "{% url 'UserRegisterAPI' %}",
+                      data: formData,
+                      success: function (response) {
+                        // $(this).val('');
+                        // $("#registration-message").text(response.message);
+                        
+                        if (response.Message !== "User created successfully !!!") {
+                          alert(response.Message);
+                        } else {
+                          alert(response.Message);
+                          window.location.href = "{% url 'login' %}";
+                          console.log(data);
+                        }
+                      },
+                      error: function (xhr,status, error) {
+                          // $("#registration-message").text("Registration failed. Please try again.");
+                          console.log(xhr.responseText);
+                      }
+                  });
+              });
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+

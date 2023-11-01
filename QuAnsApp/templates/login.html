@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Login Form</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'login.css' %}">
+    <!-- <script src="https://kit.fontawesome.com/a076d05399.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>Login Form</header>
+      <form id="login-form">
+        {% csrf_token %}
+        <div class="input-field">
+          <input type="text" name="login_key"required>
+          <label>Email or Phone number</label>
+        </div>
+        <div class="input-field">
+          <input class="pswrd" type="password"  name="password" required>
+          <span class="show">SHOW</span>
+          <label>Password</label>
+        </div>
+        <div class="button">
+          <div class="inner"></div>
+          <button id = "login-button">LOGIN</button>
+        </div>
+      </form>
+      <div id="login-message"></div>
+
+      <script>
+        $(document).ready(function () {
+            $("#login-form").on("submit ", function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+  
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'LoginUserAPI' %}",
+                    data: formData,
+                    success: function (response) {
+                      // $("#login-message").text(response.Message);
+                      if (response.Message !== "Login successful !!!") {
+                        alert(response.Message);
+                      } else {
+                        token = response.Data.token
+                        // alert(response.Message);
+                        localStorage.setItem('jwt_token', token);
+                        window.location.href = "{% url 'main_page' %}";
+                      }
+                    },
+                    error: function (error) {
+                        // $("#login-message").text("Login failed. Please try again.");
+                    }
+                });
+            });
+        });
+      </script>
+      <div class="signup">
+        Not a member? <a href="{% url 'registration' %}">Signup now</a>
+      </div>  
+    </div>
+  </body>
+</html>
