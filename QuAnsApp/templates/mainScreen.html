@@ -151,11 +151,14 @@
 
             $(document).ready(function () {
                 // Make a GET request to the API endpoint
+                var token = localStorage.getItem('jwt_token')
+                console.log(token)
+
                 $.ajax({
                     url: "{% url 'AllAnswerAPI' %}",  // Replace with your actual API endpoint
                     method: 'GET',
                     headers: {
-                        'Authorization': 'Token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiY2Q0YjI5NmEtZGY4Yy00ZGUwLTlmODUtNWVkMjY5MjUwZDkwIiwiZXhwIjoxNjk4ODQ1NTQzLCJpYXQiOjE2OTg4MTU1NDN9.M9IGcT34DVefcJcSvi7DxpsHUS4QdGzSsL5LJ0lHBkw'  // Replace with the user's JWT token
+                        'Authorization': 'Token' +  token,
                     },
                     success: function (data) {
                         console.log("data",data.Data)
